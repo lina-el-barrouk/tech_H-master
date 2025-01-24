@@ -1,0 +1,27 @@
+<?php
+
+use App\Http\Controllers\Admin\Auth\logincontroller;
+use App\Http\Controllers\Admin\Auth\RegisteredUserController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+
+Route::prefix('admin')->middleware('guest:admin')->group(function () {
+
+    Route::get('register', [RegisteredUserController::class, 'create'])->name('admin.register');
+    Route::post('register', [RegisteredUserController::class, 'store']);
+
+    Route::get('login', [logincontroller::class, 'create'])->name('admin.login');
+    Route::post('login', [logincontroller::class, 'store']);
+
+});
+
+Route::prefix('admin')->middleware('auth:admin')->group(function () {
+
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+
+
+    Route::post('logout', [logincontroller::class, 'destroy'])->name('admin.logout');
+
+});
